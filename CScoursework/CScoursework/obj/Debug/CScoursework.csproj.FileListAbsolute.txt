@@ -1,0 +1,7 @@
+G:\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.exe.config
+G:\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.exe
+G:\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.pdb
+G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csprojAssemblyReference.cache
+G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csproj.CoreCompileInputs.cache
+G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.exe
+G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.pdb
