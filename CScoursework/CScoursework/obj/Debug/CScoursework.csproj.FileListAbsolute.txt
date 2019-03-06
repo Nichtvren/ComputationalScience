@@ -5,3 +5,10 @@ G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csprojAssemblyRefere
 G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csproj.CoreCompileInputs.cache
 G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.exe
 G:\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.pdb
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.exe.config
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.exe
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\bin\Debug\CScoursework.pdb
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csprojAssemblyReference.cache
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.csproj.CoreCompileInputs.cache
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.exe
+\\adir.hull.ac.uk\home\512\512910\Desktop\CScoursework\CScoursework\obj\Debug\CScoursework.pdb
