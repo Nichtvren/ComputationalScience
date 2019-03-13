@@ -73,6 +73,10 @@ namespace computational_science
         {
             sr = new StreamReader("Part2.csv");
             random = new Random();
+            //Read from file line by line into list or something
+            //Separate string to manipulate time
+            //Add randomness 
+            //Print all values back into file
 
 
             
