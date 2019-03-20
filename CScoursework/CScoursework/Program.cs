@@ -79,7 +79,9 @@ namespace computational_science
             random = new Random();
             generatedData = new List<string>();
             int iteration = 0; // iteration.
-            
+            double Xn;
+            double z1;
+            double z2 = 0;
 
             while ((line = sr.ReadLine()) != null)
             {
@@ -87,18 +89,16 @@ namespace computational_science
             }
             for(int i = 0; i < generatedData.Count; ++i)
             {
-                double Xn;
-                double z1;
-                double z2 = 0;
                 string[] line = generatedData[i].Split(new char[] {','});
                 Double.TryParse(line[0], out double t);
                 Double.TryParse(line[1], out double x);
                 Double.TryParse(line[2], out double u);
 
+                A = random.NextDouble() * (2 * Math.PI);
+                B = SD * Math.Sqrt(-2 * Math.Log(random.NextDouble()));
+
                 if (iteration == 0)
-                {
-                    A = random.NextDouble() * (2 * Math.PI);
-                    B = SD * Math.Sqrt(-2 * Math.Log(random.NextDouble()));
+                {                  
                     z1 = B * Math.Sin(A) + m;
                     z2 = B * Math.Cos(A) + m;
                     Xn = x + z1;
