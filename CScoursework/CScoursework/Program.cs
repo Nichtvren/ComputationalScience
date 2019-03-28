@@ -29,7 +29,7 @@ namespace computational_science
         static double B = 0.0; //inclusive upper bound.
         static string line;
         static List<string> generatedData;
-
+        static List<string> normalized;
 
 
 
@@ -87,9 +87,9 @@ namespace computational_science
             {
                 generatedData.Add(line);
             }
-            for(int i = 0; i < generatedData.Count; ++i)
+            for (int i = 0; i < generatedData.Count; ++i)
             {
-                string[] line = generatedData[i].Split(new char[] {','});
+                string[] line = generatedData[i].Split(new char[] { ',' });
                 Double.TryParse(line[0], out double t);
                 Double.TryParse(line[1], out double x);
                 Double.TryParse(line[2], out double u);
@@ -98,7 +98,7 @@ namespace computational_science
                 B = SD * Math.Sqrt(-2 * Math.Log(random.NextDouble()));
 
                 if (iteration == 0)
-                {                  
+                {
                     z1 = B * Math.Sin(A) + m;
                     z2 = B * Math.Cos(A) + m;
                     Xn = x + z1;
@@ -106,7 +106,8 @@ namespace computational_science
                     sw.WriteLine($"{t},{x},{Xn},{u}");
                     sw.Flush();
                     iteration = 1;
-                } else if (iteration == 1)
+                }
+                else if (iteration == 1)
                 {
                     Xn = x + z2;
                     Console.WriteLine($"{t},{x},{Xn},{u}");
@@ -115,13 +116,37 @@ namespace computational_science
                     iteration = 0;
                 }
             }
-            
-          
-
-           
-
-
         }
+
+        static void perceptron()
+        {
+            sr = new StreamReader("Part2.csv");
+            sw = new StreamWriter("Part3.csv");
+
+            normalized = new List<string>();
+
+            generatedData = new List<string>();
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                generatedData.Add(line);
+            }
+
+            for(int i = 0; i < generatedData.Count; ++i)
+            {
+                string[] line = generatedData[i].Split(new char[] { ',' });
+                Double.TryParse(line[0], out double t);
+                Double.TryParse(line[1], out double x);
+                Double.TryParse(line[2], out double xnoise);
+                Double.TryParse(line[3], out double u);
+
+                
+
+                
+            }
+            
+        }
+
 
         static void Main(string[] args)
         {
