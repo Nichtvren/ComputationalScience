@@ -36,7 +36,7 @@ namespace computational_science
 
         static void generate()
         {
-            using (sw = new StreamWriter("Part1.txt"))
+            using (sw = new StreamWriter("Part1.csv"))
             {
                 n = (Tf - T0) / H;
                 x = new float[(int)n + 2];
@@ -74,8 +74,8 @@ namespace computational_science
 
         static void randomness()
         {
-            sr = new StreamReader("Part1.txt");
-            sw = new StreamWriter("Part2.csv");
+            sr = new StreamReader("Part1.csv");
+           
             random = new Random();
             generatedData = new List<string>();
             int iteration = 0; // iteration.
@@ -87,33 +87,40 @@ namespace computational_science
             {
                 generatedData.Add(line);
             }
-            for (int i = 0; i < generatedData.Count; ++i)
+            using (sw = new StreamWriter("Part2.csv"))
             {
-                string[] line = generatedData[i].Split(new char[] { ',' });
-                Double.TryParse(line[0], out double t);
-                Double.TryParse(line[1], out double x);
-                Double.TryParse(line[2], out double u);
-
-                A = random.NextDouble() * (2 * Math.PI);
-                B = SD * Math.Sqrt(-2 * Math.Log(random.NextDouble()));
-
-                if (iteration == 0)
+                for (int i = 0; i < generatedData.Count; ++i)
                 {
-                    z1 = B * Math.Sin(A) + m;
-                    z2 = B * Math.Cos(A) + m;
-                    Xn = x + z1;
-                    Console.WriteLine($"{t},{x},{Xn},{u}");
-                    sw.WriteLine($"{t},{x},{Xn},{u}");
-                    sw.Flush();
-                    iteration = 1;
-                }
-                else if (iteration == 1)
-                {
-                    Xn = x + z2;
-                    Console.WriteLine($"{t},{x},{Xn},{u}");
-                    sw.WriteLine($"{t},{x},{Xn},{u}");
-                    sw.Flush();
-                    iteration = 0;
+                    string[] line = generatedData[i].Split(new char[] { ',' });
+                    Double.TryParse(line[0], out double t);
+                    Double.TryParse(line[1], out double x);
+                    Double.TryParse(line[2], out double u);
+
+                    A = random.NextDouble() * (2 * Math.PI);
+                    B = SD * Math.Sqrt(-2 * Math.Log(random.NextDouble()));
+
+                    if (iteration == 0)
+                    {
+                        z1 = B * Math.Sin(A) + m;
+                        z2 = B * Math.Cos(A) + m;
+                        Xn = x + z1;
+                        Console.WriteLine($"{t},{x},{Xn},{u}");
+
+
+                        sw.WriteLine($"{t},{x},{Xn},{u}");
+
+
+                        sw.Flush();
+                        iteration = 1;
+                    }
+                    else if (iteration == 1)
+                    {
+                        Xn = x + z2;
+                        Console.WriteLine($"{t},{x},{Xn},{u}");
+                        sw.WriteLine($"{t},{x},{Xn},{u}");
+                        sw.Flush();
+                        iteration = 0;
+                    }
                 }
             }
         }
@@ -122,6 +129,9 @@ namespace computational_science
         {
             sr = new StreamReader("Part2.csv");
             sw = new StreamWriter("Part3.csv");
+
+            double currentMin = 1.0;
+            double currentMax = 0.0;
 
             normalized = new List<string>();
 
@@ -135,16 +145,24 @@ namespace computational_science
             for(int i = 0; i < generatedData.Count; ++i)
             {
                 string[] line = generatedData[i].Split(new char[] { ',' });
-                Double.TryParse(line[0], out double t);
-                Double.TryParse(line[1], out double x);
                 Double.TryParse(line[2], out double xnoise);
-                Double.TryParse(line[3], out double u);
+               
+                if(xnoise < currentMin)
+                {
+                    currentMin = xnoise;
+                    
+                }
+                else if(xnoise > currentMax)
+                {
+                    currentMax = xnoise;
 
-                
-
-                
+                }    
             }
-            
+            Console.WriteLine($"current min: {currentMin}\ncurrent max: {currentMax}");
+
+
+
+
         }
 
 
@@ -153,6 +171,7 @@ namespace computational_science
 
             generate();
             randomness();
+            perceptron();
 
             sw.Close();       
             Console.ReadLine();
