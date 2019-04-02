@@ -13,6 +13,8 @@ namespace computational_science
         static StreamWriter sw;
         static StreamReader sr;
         static Random random;
+
+        // Part 1.
         static float[] x;
         static float H = 0.01f; // step size.
         static float a = -2;
@@ -23,15 +25,29 @@ namespace computational_science
         static float n; 
         static float t = 0; // time to take.
         static int samples = 0;
+        //----------------------------------------------------------------------------------
+
+        // Part 2.
         static float m = 0.0f; // mean.
         static float SD = 0.001f; // standard deviation.       
         static double A = 0.0; //inclusive lower bound.
         static double B = 0.0; //inclusive upper bound.
+        // -----------------------------------------------------------------------------------
+
+        // Part 3.
         static string line;
         static List<string> generatedData;
-        static List<string> normalized;
-
-
+        private static double[] data;
+        private static int historicValues = 4; //previous values that the intellegent agent will use to predict + the correct value.
+        static double currentMin = 1.0;
+        static double currentMax = 0.0;
+        static double[] inputWeights = new double[historicValues - 1];
+        static double bias;
+        static double RSME = 9; // Root Squared Mean Error.
+        static double oldRSME = 10;
+        static double error;
+        static double currentError;
+        static int dataSize = 0;
 
 
         static void generate()
@@ -44,17 +60,12 @@ namespace computational_science
                 for (int k = 0; k < n; ++k)
                 {
                     if (t < 5)
-                    {
                         U = 2;
-                    }
                     if (5 < t && t <= 10)
-                    {
                         U = 1;
-                    }
                     if (10 < t && t <= 15)
-                    {
                         U = 3;
-                    }
+
                     x[k + 1] = x[k] + H * (a * x[k] + b * U);
                     t = t + H;
 
@@ -127,42 +138,79 @@ namespace computational_science
 
         static void perceptron()
         {
+            data = new double[historicValues];
             sr = new StreamReader("Part2.csv");
             sw = new StreamWriter("Part3.csv");
 
-            double currentMin = 1.0;
-            double currentMax = 0.0;
-
-            normalized = new List<string>();
-
-            generatedData = new List<string>();
-
-            while ((line = sr.ReadLine()) != null)
+            while(!(sr.EndOfStream))
             {
-                generatedData.Add(line);
-            }
+                ++dataSize;
+                double currentX = getData(false);
 
-            for(int i = 0; i < generatedData.Count; ++i)
-            {
-                string[] line = generatedData[i].Split(new char[] { ',' });
-                Double.TryParse(line[2], out double xnoise);
-               
-                if(xnoise < currentMin)
-                {
-                    currentMin = xnoise;
-                    
-                }
-                else if(xnoise > currentMax)
-                {
-                    currentMax = xnoise;
+                if (currentX < currentMin)
+                    currentMin = currentX;
 
-                }    
+                if (currentX > currentMax)
+                    currentMax = currentX;
             }
+            sr = new StreamReader("Part2.csv");
             Console.WriteLine($"current min: {currentMin}\ncurrent max: {currentMax}");
+            randomisedWeights();
+
+            // initial fill of the data array.
+            for(int i = 0; i < historicValues; ++i)
+                data[i] = getData(true);
+
+            while(RSME < oldRSME)
+            {
+                if (sr.EndOfStream)
+                {
+                    sr = new StreamReader("Part2.csv");
+                    RSME = Math.Sqrt(currentError / dataSize); // inside (mean).
+                }
+
+                oldRSME = RSME; 
+                error = trainAgent(data);
+                currentError += error * error; // sqaured part of RSME.
+                Console.WriteLine(error);
+
+                for (int i = 0; i < historicValues - 1; ++i) // move data in array down one position and fill.
+                    data[i] = data[i + 1];
+
+                data[historicValues - 1] = getData(true); 
 
 
+            }
+        }
 
+        static double trainAgent(double[] pData)
+        {
 
+        }
+
+        static double predicted(double[] pData)
+        {
+
+        }
+
+        static void randomisedWeights()
+        {
+            for(int i = 0; i < inputWeights.Length; ++i)
+                inputWeights[i] = random.NextDouble() - 0.5;
+
+            bias = random.NextDouble() - 0.5;
+        }
+
+        private static double getData(bool pNormalize)
+        {
+            string line = sr.ReadLine();
+            string[] split = line.Split(new char[] { ',' });
+            double x = double.Parse(split[2]);
+            if(pNormalize == true)
+            {
+                x = ((x - currentMin) / (currentMax - currentMin));
+            }
+            return x;
         }
 
 
