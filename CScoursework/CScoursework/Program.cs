@@ -48,6 +48,7 @@ namespace computational_science
         static double error;
         static double currentError;
         static int dataSize = 0;
+        static double learningRate = 0.1;
 
 
         static void generate()
@@ -161,36 +162,97 @@ namespace computational_science
             for(int i = 0; i < historicValues; ++i)
                 data[i] = getData(true);
 
-            while(RSME < oldRSME)
+            //RSME <= oldRSME
+            while (RSME > .044)
             {
+                oldRSME = RSME;
                 if (sr.EndOfStream)
                 {
                     sr = new StreamReader("Part2.csv");
                     RSME = Math.Sqrt(currentError / dataSize); // inside (mean).
+                    currentError = 0;
+                    // initial fill of the data array.
+                    for (int i = 0; i < historicValues; ++i)
+                        data[i] = getData(true);
                 }
-
-                oldRSME = RSME; 
                 error = trainAgent(data);
                 currentError += error * error; // sqaured part of RSME.
-                Console.WriteLine(error);
-
+                Console.WriteLine(RSME);
                 for (int i = 0; i < historicValues - 1; ++i) // move data in array down one position and fill.
                     data[i] = data[i + 1];
-
                 data[historicValues - 1] = getData(true); 
-
-
             }
+            Console.WriteLine("train plox " + RSME);
+            // training finished -------------------------------------------------------------------------------------------------.
+
+            sr = new StreamReader("Part2.csv");
+            // initial fill of the data array.
+            for (int i = 0; i < historicValues; ++i)
+                data[i] = getData(true);
+
+            double predictedX = predicted(data);
+            sw.WriteLine($"{predictedX},{data[data.Length - 1]}");
+
+
+            while(!(sr.EndOfStream))
+            {
+                for (int i = 0; i < historicValues - 1; ++i) // move data in array down one position and fill.
+                    data[i] = data[i + 1];
+                data[historicValues - 1] = getData(true);
+                predictedX = predicted(data);
+                sw.WriteLine($"{predictedX},{data[data.Length - 1]}");
+            }
+            Console.WriteLine("done!!!");
         }
 
         static double trainAgent(double[] pData)
         {
+            
+            double netSum = 0; // sum of all the weighted inputs + bias.
+            double output = 0;
+            double delta = 0;
 
+            // sums up all the weighted input and adds the bias
+            for(int i = 0; i < pData.Length - 1; ++i)
+            {
+                netSum += pData[i] * inputWeights[i];
+            }
+            netSum += bias;
+            // calculates output value of the sigmoid based on the weighted input.
+            output = activation(netSum);
+            
+            // calculates error size and modifies weights.
+            delta = pData[pData.Length - 1] - output;
+
+            for (int i = 0; i < pData.Length - 1; ++i)
+            {
+                inputWeights[i] += learningRate * delta * pData[i];
+                
+            }
+
+            bias += learningRate * delta;
+            return delta;
         }
 
         static double predicted(double[] pData)
         {
+            double netSum = 0; // sum of all the weighted inputs + bias.
+            double output = 0;
+            for (int i = 0; i < pData.Length - 1; ++i)
+            {
+                netSum += pData[i] * inputWeights[i];
+            }
+            netSum += bias;
+            
+           return output = activation(netSum);
+        }
 
+        static double activation(double input)
+        {
+            //stepper
+
+            //sigmoid
+            return 1 / (1 + Math.Exp(-input));
         }
 
         static void randomisedWeights()
