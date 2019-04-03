@@ -162,8 +162,8 @@ namespace computational_science
             for(int i = 0; i < historicValues; ++i)
                 data[i] = getData(true);
 
-            //RSME <= oldRSME
-            while (RSME > .044)
+            //.044
+            while (RSME <= oldRSME)
             {
                 oldRSME = RSME;
                 if (sr.EndOfStream)
@@ -249,10 +249,17 @@ namespace computational_science
 
         static double activation(double input)
         {
-            //stepper
+            if(input <= 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
 
             //sigmoid
-            return 1 / (1 + Math.Exp(-input));
+           // return 1 / (1 + Math.Exp(-input));
         }
 
         static void randomisedWeights()
